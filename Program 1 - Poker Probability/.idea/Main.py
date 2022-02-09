@@ -217,8 +217,8 @@ hand = ['JH','JH','9H','KH','KH']
 print('Hand: ',hand)
 ranker.checkCombo(hand)
 
-print(player1.showHand())
-print(player2.showHand())
-print(player3.showHand())
-print(player4.showHand())
-print(player5.showHand())
+# print(player1.showHand())
+# print(player2.showHand())
+# print(player3.showHand())
+# print(player4.showHand())
+# print(player5.showHand())
