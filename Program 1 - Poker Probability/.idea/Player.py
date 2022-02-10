@@ -1,12 +1,13 @@
-from Tools import Tools
+from Helper import Helper
+from Ranker import Ranker
 
 class Player:
     hand = []
     name = ''
 
     def __init__(self, hand, name):
-        self.hand = hand
-        self.name = name
+            self.hand = hand
+            self.name = name
 
     def showCards(self):
         print('Cards in hand:\n', self.hand, '\n')
@@ -18,19 +19,18 @@ class Player:
 
         rank = combos[combo] + (values[value]/100)
 
-    def showHand(self):
+    def setHand(self, hand):
+        self.hand = hand
+
+    def getHand(self):
         return self.hand
 
-    # def sortHand(self):
-    #     suits = []
-    #     [suits.append(card[-1:]) for card in self.hand]
-    #
-    #     temp = self.hand
-    #     valueHand = Tools.castValue(temp)
-    #     stringHand = Tools.castString(valueHand)
-    #
-    #     sortedHand = []
-    #     for card in range(len(stringHand)):
-    #         sortedHand.append(stringHand[card] + suits[card])
-    #
-    #     return sortedHand
+    def sortHand(self):
+        ranker = Ranker()
+        self.setHand(ranker.sortHand(self.getHand()))
+
+    def setRank(self, rank):
+        self.rank = rank
+
+    def getRank(self):
+        return self.rank

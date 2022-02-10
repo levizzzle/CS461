@@ -1,9 +1,11 @@
 from Deck import Deck
 from Player import Player
 from Ranker import Ranker
+from Helper import Helper
 
 deck = Deck()
 ranker = Ranker()
+helper = Helper()
 
 dealer = Player(deck.dealHand(), 'Dealer')
 player1 = Player(deck.dealHand(), 'Player 1')
@@ -15,8 +17,9 @@ player5 = Player(deck.dealHand(), 'Player 5')
 players = [dealer, player1, player2, player3, player4, player5]
 for player in players:
 
+    # player.setHand(ranker.sortHand(player.getHand()))
     player.sortHand()
-    print(player.name, ': ', player.showHand())
+    print(player.name, ': ', player.getHand())
     ranker.checkCombo(player.hand)
     print('---------------------------')
 
