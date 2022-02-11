@@ -3,9 +3,14 @@
 class Ranker:
 
     comboCard = ''
+    comboCard2 = ''
+    highCard = ''
 
     def rankHand(self, hand):
         self.checkCombo(hand)
+
+    def setComboCard(self,comboCard):
+        x = 1
 
     def checkCombo(self, hand):
         noPair = False
@@ -22,11 +27,9 @@ class Ranker:
         if flush and (self.castValue(self.sortHand(hand)) == [10,11,12,13,14]):
             royalFlush = True
 
-        # print('No pair: ', noPair,'\nOne Pair: ', onePair, '\nTwo pair: ', twoPair, '\nThree of a kind: ', threeOfAKind,
-        #       '\nStraight: ', straight, '\nFlush: ', flush, '\nFull house: ', fullHouse,
-        #       '\nFour of a kind: ', fourOfAKind, '\nStraight Flush: ', straightFlush, '\nRoyal flush: ', royalFlush)
-
         ranks = [royalFlush, straightFlush, fourOfAKind, fullHouse, flush, straight, threeOfAKind, twoPair, onePair, noPair]
+        # ranks = [onePair]
+
         rankStrings = {0:'Royal Flush', 1:'Straight Flush', 2:'Four of a Kind', 3:'Full House', 4:'Flush', 5:'Straight',
                        6:'Three of a Kind', 7:'Two Pair', 8:'One Pair', 9:'No Pair'}
 
@@ -40,7 +43,7 @@ class Ranker:
 
         if count == 0:
             noPair = True
-            print(rankStrings[9])
+            # print(rankStrings[9])
             combo = rankStrings[9]
 
         self.getRank(combo, hand)
@@ -101,7 +104,7 @@ class Ranker:
 
     def checkThreeOfAKind(self, hand):
         valueHand = self.castValue(hand)
-
+        print(valueHand)
         values = []
         [values.append(card) for card in valueHand if card not in values]
 
@@ -109,33 +112,39 @@ class Ranker:
             for card in values:
                 if valueHand.count(card) == 3:
                     self.comboCard = card
-                return True
-        return False
-
-    def checkTwoPair(self, hand):
-        valueHand = self.castValue(hand)
-
-        values = []
-        [values.append(card) for card in valueHand if card not in values]
-
-        if len(values) <= 3:
-            for card in values:
-                if valueHand.count(card) == 2:
-                    self.comboCard = card
                     return True
         return False
 
-    def checkOnePair(self, hand):
-        valueHand = self.castValue(hand)
+    def checkTwoPair(self, hand):
+        dataHand = self.splitHand(hand)
+        cardNames = dataHand[0]
+        handValues = dataHand[1]
+        handSuits = dataHand[2]
 
-        values = self.removeDuplicates(valueHand)#[]
+        values = self.removeDuplicates(handValues)
 
-        if len(values) <= 4:
+        self.comboCard = []
+        if len(values) <= 3:
             for card in values:
-                if valueHand.count(card) == 2:
-                    self.comboCard = card
-                    print(self.comboCard)
-                return True
+                if handValues.count(card) == 2:
+                    self.comboCard.append(self.cardToString(card))
+            if len(self.comboCard) == 2:
+                return [True, 'Two Pair of: ' + self.comboCard[0] + ' and ' + self.comboCard[1]]
+        return False
+
+    def checkOnePair(self, hand):
+        dataHand = self.splitHand(hand)
+        cardNames = dataHand[0]
+        handValues = dataHand[1]
+        handSuits = dataHand[2]
+
+        values = self.removeDuplicates(handValues)
+
+        if len(values) == 4:
+            for card in values:
+                if handValues.count(card) == 2:
+                    self.comboCard = self.cardToString(card)
+                    return [True, 'Pair of: ' + self.comboCard]
         return False
 
     def castValue(self, hand):
@@ -148,6 +157,29 @@ class Ranker:
 
         return valueHand
 
+    def castDataHand(self, hand):
+        values = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13, 'A':14}
+        dataHand = {}
+
+        for card in hand:
+            cardValue = values[card[:(len(card)-1)]]
+            cardSuit = card[-1:]
+            dataHand[card] = [cardValue, cardSuit]
+        # print(dataHand)
+
+        return dataHand
+
+    def splitHand(self, hand):
+        values = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13, 'A':14}
+        cardName, handValues, handSuits = [], [], []
+
+        for card in hand:
+            cardName.append(card)
+            handValues.append(values[card[:(len(card)-1)]])
+            handSuits.append(card[-1:])
+
+        return [cardName, handValues, handSuits]
+
     def castString(self, hand):
         values = {2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9', 10:'10', 11:"J", 12:'Q', 13:'K', 14:'A'}
 
@@ -156,6 +188,11 @@ class Ranker:
             stringHand.append(values[card])
 
         return stringHand
+
+    def cardToString(self, card):
+        values = {2:'2', 3:'3', 4:'4', 5:'5', 6:'6', 7:'7', 8:'8', 9:'9', 10:'10', 11:"J", 12:'Q', 13:'K', 14:'A'}
+
+        return values[card]
 
     def sortHand(self, hand):
         suits = []
