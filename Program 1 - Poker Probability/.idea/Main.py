@@ -6,44 +6,68 @@ from Helper import Helper
 deck = Deck()
 ranker = Ranker()
 helper = Helper()
+playerHands = []
+count1 = 0
+count2 = 0
 
-# dealer = Player(deck.dealHand(), 'Dealer')
-# player1 = Player(deck.dealHand(), 'Player 1')
-# player2 = Player(deck.dealHand(), 'Player 2')
-# player3 = Player(deck.dealHand(), 'Player 3')
-# player4 = Player(deck.dealHand(), 'Player 4')
-# player5 = Player(deck.dealHand(), 'Player 5')
+def getDealerHand():
+    dealer = Player('Dealer')
 
-dealer = Player([], 'Dealer')
-player1 = Player([], 'Player 1')
-player2 = Player([], 'Player 2')
-player3 = Player([], 'Player 3')
-player4 = Player([], 'Player 4')
-player5 = Player([], 'Player 5')
+    return dealer
 
-players = [dealer, player1, player2, player3, player4, player5]
-
-def playerHands():
+def getPlayerHands():
+    players = [Player('Player 1'), Player('Player 2'),
+               Player('Player 3'), Player('Player 4'), Player('Player 5')]
     for player in players:
-        # player.setHand(ranker.sortHand(player.getHand()))
-        player.sortHand()
-        print(player.name, ': ', player.getHand())
-        ranker.checkCombo(player.hand)
-        print('---------------------------')
+        playerHands.append(player)
 
-playerHands()
-print(deck.showDeckSize())
-# print(dealer.showHand())
-# hand = ['10H','JH','QH','KH','AH']
-# print('Hand: ',hand,'\n')
+    return players
 
-# print(ranker.checkOnePair(hand))
-# print(ranker.checkTwoPair(hand))
-# print(ranker.checkThreeOfAKind(hand))
-# print(ranker.checkFourOfAKind(hand))
-# print(ranker.checkFullHouse(hand))
-# print(ranker.checkStraight(hand))
-# print(ranker.checkFlush(hand))
+def checkHands(dealerHand):
+    players = getPlayerHands()
+    allPlayers = [dealerHand]
+
+    for player in players:
+        allPlayers.append(player)
+
+    playerResults = []
+    for player in allPlayers:
+        print(player.getHand())
+        playerResults.append([player.name, player.getHand(), ranker.checkCombo(player.hand)])
+
+    return playerResults
+
+def shufflePlayerHands():
+    for player in playerHands:
+        deck.addCardsToDeck(player.hand)
+    deck.shuffleDeck()
+
+def getResults(dealerHand, playerHands):
+    playerHands = checkHands(dealerHand)
+    winner = None
+    for player in playerHands:
+        if winner == None or (player[2][0] > playerHands[winner][2][0]):
+            winner = playerHands.index(player)
+        # print(player)
+    return [playerHands[winner][0],playerHands[winner][1],playerHands[winner][2]]
+
+for count in range(1,500):
+    # deck.newDeck()
+    dealerHand = getDealerHand()
+    for count in range(1,500):
+        # dealerRank = d
+        winners = []
+        results = getResults(dealerHand, playerHands)
+        shufflePlayerHands()
+        # winners.append
+        print('---------------------')
+        print('Dealer Rank: ', round(ranker.checkCombo(dealerHand.hand)[0]))
+        print(results, '\n')
+
+
+
+# print(results)
+
 
 
 

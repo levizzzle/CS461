@@ -5,12 +5,13 @@ from Deck import Deck
 class Player(Deck):
     hand = []
     name = ''
+    handRank = 0
 
-    def __init__(self, hand, name):
-        # self.hand = hand
+    def __init__(self, name):
         self.name = name
+        if name == 'Dealer':
+            super().newDeck()
         self.hand = super().dealHand()
-        # print(self.hand)
 
     def showCards(self):
         print('Cards in hand:\n', self.hand, '\n')
@@ -30,10 +31,10 @@ class Player(Deck):
 
     def sortHand(self):
         ranker = Ranker()
-        self.setHand(ranker.sortHand(self.getHand()))
+        # self.setHand(ranker.sortHand(self.getHand()))
 
     def setRank(self, rank):
-        self.rank = rank
+        self.handRank = rank
 
     def getRank(self):
         return self.rank

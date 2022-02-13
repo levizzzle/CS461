@@ -2,6 +2,7 @@ import random
 
 class Deck:
     deck = []
+    count = 0
 
     def __init__(self):
         cards = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
@@ -15,6 +16,16 @@ class Deck:
         for card in self.deck:
             print(card)
 
+    def newDeck(self):
+        cards = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
+        suits = ['S','H','D','C']
+
+        self.deck = []
+        for suit in suits:
+            for card in cards:
+             self.deck.append(card+suit)
+        self.shuffleDeck()
+
     def shuffleDeck(self):
         random.shuffle(self.deck)
 
@@ -25,9 +36,18 @@ class Deck:
         hand = []
         numCards = range(0,5)
 
+        # if self.count == 0:
+        #     hand = ['10H','JS','QC','KH','AH']
+        #     for card in hand:
+        #         self.deck.remove(card)
+        #     self.count = 1
+        #     return hand
+
         for card in numCards:
             hand.append(self.deck.pop())
         return hand
+        #
+        # return ['10H','JS','QC','KH','AH']
 
     def addCardsToDeck(self, hand):
         for card in hand:
