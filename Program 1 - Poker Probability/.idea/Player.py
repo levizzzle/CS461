@@ -1,13 +1,16 @@
 from Helper import Helper
 from Ranker import Ranker
+from Deck import Deck
 
-class Player:
+class Player(Deck):
     hand = []
     name = ''
 
     def __init__(self, hand, name):
-            self.hand = hand
-            self.name = name
+        # self.hand = hand
+        self.name = name
+        self.hand = super().dealHand()
+        # print(self.hand)
 
     def showCards(self):
         print('Cards in hand:\n', self.hand, '\n')
