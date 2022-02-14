@@ -47,6 +47,7 @@ class Ranker:
                 comboString = rank[1]
                 comboValue = rank[3]
                 highCard = rank[2]
+                # print('High Card: ',highCard)
                 combo = rankStrings[ranks.index(rank)]
                 count += 1
                 break
@@ -55,8 +56,8 @@ class Ranker:
             noPair = [True, 'No Pair', highCard]
             combo = rankStrings[9]
             comboString = 'No combo'
-            highCard = self.castValue(hand)[-1:]
-            highCard = hand[-1:][0][:-1]
+            highCard = self.cardToString(self.castValue(hand)[4])
+            # highCard = hand[-1:][0][:-1]
 
         # print('CHECKING: ', self.getRank(combo, hand, comboString, highCard, comboValue))
         return self.getRank(combo, hand, comboString, highCard, comboValue)

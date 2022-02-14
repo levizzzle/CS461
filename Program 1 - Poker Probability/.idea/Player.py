@@ -9,10 +9,6 @@ class Player(Deck):
 
     def __init__(self, name):
         self.name = name
-        if name == 'Dealer':
-            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
-            super().newDeck()
-
         self.hand = super().dealHand()
 
     def showCards(self):

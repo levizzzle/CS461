@@ -46,3 +46,4 @@ class Deck:
     def addCardsToDeck(self, hand):
         for card in hand:
             self.deck.append(card)
+        self.shuffleDeck()
