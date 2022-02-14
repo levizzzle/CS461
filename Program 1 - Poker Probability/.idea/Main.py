@@ -2,6 +2,7 @@ from Deck import Deck
 from Player import Player
 from Ranker import Ranker
 from Helper import Helper
+import random
 
 
 def getDealerHand():
@@ -53,6 +54,14 @@ deck = Deck()
 ranker = Ranker()
 helper = Helper()
 
+# two = ['10H','10S','5C','5D','2H']
+# three = ['10H','10S','5C','10D','6H']
+# four = ['10H','10S','10C','10D','AH']
+# hand = three
+# random.shuffle(hand)
+# print(hand)
+# print(ranker.checkCombo(hand))
+
 dealer = getDealerHand()
 players = getPlayerHands()
 
@@ -61,12 +70,12 @@ num = 1
 dealerRanks = []
 dealerWins = [0,0,0,0,0,0,0,0,0,0]
 
-numLoops = 100000
+numLoops = 10
 for count in range(0,numLoops):
     deck.addCardsToDeck(dealer.hand)
     dealer = getDealerHand()
     wins = 0
-    for count in range(0,1):
+    for count in range(0,10):
         shufflePlayerHands()
         players = getPlayerHands()
         results = getResults(dealer, players)
@@ -95,12 +104,12 @@ for num in range(0,10):
         print('Win Percentage: ', winPercent, '%')
         print('Chance of hand: ', comboChance,'%\n-----------------------------')
 
-# print(dealerRanks)
-# print(dealerWins)
+print(dealerRanks)
+print(dealerWins)
 
 
 
-# print(results)
+print(results)
 
 
 

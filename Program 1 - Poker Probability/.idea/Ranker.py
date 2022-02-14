@@ -28,7 +28,7 @@ class Ranker:
         royalFlush = [False, 'No Royal Flush']
 
         values = self.castValue(hand)
-        if flush and (values == [10,11,12,13,14]):
+        if flush[0] and (values == [10,11,12,13,14]):
             royalFlush = [True, 'Royal Flush: ' + str(hand), self.cardToString(values[4]), 14]
 
         ranks = [royalFlush, straightFlush, fourOfAKind, fullHouse, flush, straight, threeOfAKind, twoPair, onePair, noPair]
@@ -85,6 +85,7 @@ class Ranker:
             comboValue = 0
             if len(suits) == 1:
                 self.comboCard = suits[0]
+                handValues.sort()
                 comboValue = handValues[4]
                 highCard = self.cardToString(self.getHighCard(values))
                 return  [True, 'Flush: ' + self.comboCard,
