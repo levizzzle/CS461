@@ -99,9 +99,10 @@ class Ranker:
 
         firstCard = valueHand[0]
         straightHand = [firstCard, firstCard + 1, firstCard + 2, firstCard + 3, firstCard + 4]
+        aceStraight = [2, 3, 4, 5, 14]
 
         comboValue = 0
-        if valueHand == straightHand:
+        if valueHand == straightHand or valueHand == aceStraight:
             self.comboCard = hand[0]
             comboValue = valueHand[4]
             highCard = hand[-1:][0]
