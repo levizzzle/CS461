@@ -106,7 +106,7 @@ for num in range(0,10):
 
 # print(dealerRanks)
 # print(dealerWins)
-# print(results)
+print(results)
 
 
 
