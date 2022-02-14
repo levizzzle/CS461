@@ -10,7 +10,9 @@ class Player(Deck):
     def __init__(self, name):
         self.name = name
         if name == 'Dealer':
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
             super().newDeck()
+
         self.hand = super().dealHand()
 
     def showCards(self):
@@ -22,6 +24,9 @@ class Player(Deck):
         values = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13, 'A':14}
 
         rank = combos[combo] + (values[value]/100)
+
+    def newDeck(self):
+        super().newDeck()
 
     def setHand(self, hand):
         self.hand = hand

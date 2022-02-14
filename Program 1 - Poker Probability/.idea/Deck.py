@@ -5,6 +5,7 @@ class Deck:
     count = 0
 
     def __init__(self):
+        # self.newDeck()
         cards = ['2','3','4','5','6','7','8','9','10','J','Q','K','A']
         suits = ['S','H','D','C']
         for suit in suits:
@@ -35,13 +36,6 @@ class Deck:
     def dealHand(self):
         hand = []
         numCards = range(0,5)
-
-        # if self.count == 0:
-        #     hand = ['10H','JS','QC','KH','AH']
-        #     for card in hand:
-        #         self.deck.remove(card)
-        #     self.count = 1
-        #     return hand
 
         for card in numCards:
             hand.append(self.deck.pop())

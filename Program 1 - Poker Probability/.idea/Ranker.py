@@ -31,14 +31,6 @@ class Ranker:
         if flush and (values == [10,11,12,13,14]):
             royalFlush = [True, 'Royal Flush: ' + str(hand), self.cardToString(values[4]), 14]
 
-        # if flush:
-        #     valueHand = self.castValue((hand))
-        #     royal = [10,11,12,13,14]
-        #     for card in royal:
-        #         if card in valueHand:
-        #             royalFlush = [True, 'Royal Flush: ' + str(hand), hand[-1:], 1]
-
-
         ranks = [royalFlush, straightFlush, fourOfAKind, fullHouse, flush, straight, threeOfAKind, twoPair, onePair, noPair]
 
         rankStrings = {0:'Royal Flush', 1:'Straight Flush', 2:'Four of a Kind', 3:'Full House', 4:'Flush', 5:'Straight',
@@ -51,7 +43,7 @@ class Ranker:
 
         for rank in ranks:
             if rank[0]== True:
-                print(rankStrings[ranks.index(rank)])
+                # print(rankStrings[ranks.index(rank)])
                 comboString = rank[1]
                 comboValue = rank[3]
                 highCard = rank[2]
@@ -253,21 +245,21 @@ class Ranker:
 
     def cardToValue(self, card):
         values = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13, 'A':14}
-        print(card)
+        # print(card)
         return values[card]
 
     def sortHand(self, hand):
-        suits = []
-        [suits.append(card[-1:]) for card in hand]
+        # suits = []
+        # [suits.append(card[-1:]) for card in hand]
+        #
+        # valueHand = self.castValue(hand)
+        # stringHand = self.castString(valueHand)
+        #
+        # sortedHand = []
+        # for card in range(len(stringHand)):
+        #     sortedHand.append(stringHand[card] + suits[card])
 
-        valueHand = self.castValue(hand)
-        stringHand = self.castString(valueHand)
-
-        sortedHand = []
-        for card in range(len(stringHand)):
-            sortedHand.append(stringHand[card] + suits[card])
-
-        return sortedHand
+        return hand #sortedHand
 
     def removeDuplicates(self, hand):
         values = []
