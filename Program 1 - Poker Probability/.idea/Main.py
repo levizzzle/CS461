@@ -72,7 +72,9 @@ allRanks = []
 dealerRanks = []
 dealerWins = [0,0,0,0,0,0,0,0,0,0]
 
-numLoops = 2000
+allHands = []
+dealerData = []
+numLoops = 100
 for count in range(0,numLoops):
     deck.addCardsToDeck(dealer.hand)
     dealer = getDealerHand()
@@ -93,14 +95,18 @@ for count in range(0,numLoops):
             allRanks.append(round(ranker.checkCombo(players[num].hand)[0]))
 
         if results[0] == 'Dealer':
+            wins += 1
             dealerWins[dealerRank] += 1
             # print(results, '\n')
 
-
-
+    dealerHand = dealer.hand
+    handWins = wins
+    handData = ranker.checkCombo(dealerHand)
+    dealerData.append([dealerHand, handWins, handData[1], handData[2], handData[3], handData[0]])
 
 combos = {0:'no pair', 1:'one pair', 2:'two pair', 3:'three of a kind', 4:'straight',
           5:'flush', 6:'full house', 7:'four of a kind', 8:'straight flush', 9:'royal flush'}
+
 for num in range(0,0):
     print('-----------------------------')
     print(combos[num],': ', dealerRanks.count(num))
@@ -120,7 +126,15 @@ for num in range(10):
     percent = round((allRanks.count(num)/((numLoops*numLoops)*6)*100),3)
     print(combos[num], ': ', percent,'%')
 
-
+print('\n')
+for entry in dealerData:
+    hand = str(entry[0])
+    numWins = entry[1]
+    winRatio = numWins/numLoops
+    comboString = entry[2]
+    highCard = entry[3]
+    handScore = entry[4]
+    print(entry, 'Win Chance: ', winRatio*100, '%')
 
 
 # test = ['JS', '8S', 'QS', '10S', '9S']
