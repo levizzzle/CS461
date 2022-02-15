@@ -54,64 +54,77 @@ deck = Deck()
 ranker = Ranker()
 helper = Helper()
 
-two = ['10H','10S','5C','5D','2H']
-three = ['10H','10S','5C','10D','6H']
-four = ['10H','10S','10C','10D','AH']
-straight = ['AH','3S','4C','5D','2H']
-hand = straight
-random.shuffle(hand)
-print(hand)
-print(ranker.checkCombo(hand))
+# two = ['10H','10S','5C','5D','2H']
+# three = ['10H','10S','5C','10D','6H']
+# four = ['10H','10S','10C','10D','AH']
+# straight = ['AH','3S','4C','5D','2H']
+# hand = straight
+# random.shuffle(hand)
+# print(hand)
+# print(ranker.checkCombo(hand))
 
 dealer = getDealerHand()
 players = getPlayerHands()
 
 
-num = 1
+loopCount = 0
+allRanks = []
 dealerRanks = []
 dealerWins = [0,0,0,0,0,0,0,0,0,0]
 
-numLoops = 300000
+numLoops = 2000
 for count in range(0,numLoops):
     deck.addCardsToDeck(dealer.hand)
     dealer = getDealerHand()
     wins = 0
-    for count in range(0,1):
+    for count in range(0,numLoops):
+        loopCount += 1
+        print('Loop count: ', loopCount,'\n')
+
         shufflePlayerHands()
         players = getPlayerHands()
         results = getResults(dealer, players)
 
         dealerRank = round(ranker.checkCombo(dealer.hand)[0])
+        allRanks.append(dealerRank)
+        dealerRanks.append(dealerRank)
+
+        for num in range(0,5):
+            allRanks.append(round(ranker.checkCombo(players[num].hand)[0]))
+
         if results[0] == 'Dealer':
             dealerWins[dealerRank] += 1
+            # print(results, '\n')
 
-        print('Dealer Rank: ', dealerRank)
-        print(results, '\n')
-        print('Loop count: ', num,'\n')
-        num += 1
-    dealerRanks.append(dealerRank)
+
 
 
 combos = {0:'no pair', 1:'one pair', 2:'two pair', 3:'three of a kind', 4:'straight',
           5:'flush', 6:'full house', 7:'four of a kind', 8:'straight flush', 9:'royal flush'}
-for num in range(0,10):
+for num in range(0,0):
     print('-----------------------------')
     print(combos[num],': ', dealerRanks.count(num))
     if dealerWins[num] > 0:
         print('Wins: ', dealerWins[num])
         winPercent = round((dealerWins[num] / (dealerRanks.count(num)*numLoops))*100,3)
-        comboChance = round((dealerRanks.count(num)/numLoops) * 100, 3)
+        comboChance = round((dealerRanks.count(num)/numLoops) * 100, 5)
         print('Win Percentage: ', winPercent, '%')
         print('Chance of hand: ', comboChance,'%')
 
 # print(dealerRanks)
 # print(dealerWins)
-print(results)
+# print(results)
+
+# print('\n' + str(len(allRanks)))
+for num in range(10):
+    percent = round((allRanks.count(num)/((numLoops*numLoops)*6)*100),3)
+    print(combos[num], ': ', percent,'%')
 
 
 
 
-
+# test = ['JS', '8S', 'QS', '10S', '9S']
+# print(ranker.checkCombo(test))
 
 
 

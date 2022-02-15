@@ -16,6 +16,8 @@ class Ranker:
         pass
 
     def checkCombo(self, hand):
+        values = self.castValue(hand)
+
         noPair = [False, 'No Pair', hand[-1:]]
         onePair = self.checkOnePair(hand)
         twoPair = self.checkTwoPair(hand)
@@ -24,10 +26,10 @@ class Ranker:
         flush = self.checkFlush(hand)
         fullHouse = self.checkFullHouse(hand)
         fourOfAKind = self.checkFourOfAKind(hand)
-        straightFlush = [(straight == flush == True), 'Straight Flush: ' + str(hand), hand[-1:][0]]
+        straightFlush = [(straight[0] == flush[0] == True), 'Straight Flush: ' + str(hand),
+                         self.cardToString(values[4]), self.castValue(hand)[4]]
         royalFlush = [False, 'No Royal Flush']
 
-        values = self.castValue(hand)
         if flush[0] and (values == [10,11,12,13,14]):
             royalFlush = [True, 'Royal Flush: ' + str(hand), self.cardToString(values[4]), 14]
 
