@@ -45,11 +45,9 @@ class Ranker:
 
         for rank in ranks:
             if rank[0]== True:
-                # print(rankStrings[ranks.index(rank)])
                 comboString = rank[1]
                 comboValue = rank[3]
                 highCard = rank[2]
-                # print('High Card: ',highCard)
                 combo = rankStrings[ranks.index(rank)]
                 count += 1
                 break
@@ -61,7 +59,6 @@ class Ranker:
             highCard = self.cardToString(self.castValue(hand)[4])
             # highCard = hand[-1:][0][:-1]
 
-        # print('CHECKING: ', self.getRank(combo, hand, comboString, highCard, comboValue))
         return self.getRank(combo, hand, comboString, highCard, comboValue)
 
     def getRank(self, combo, hand, comboString, highCard, comboValue):
@@ -108,7 +105,6 @@ class Ranker:
             self.comboCard = hand[0]
             comboValue = valueHand[4]
             highCard = hand[-1:][0]
-            # print(comboValue)
             return [True, 'Straight: ' + str(hand),
                     self.cardToString(self.getHighCard(values)), comboValue]
         return [False, 'No Straight']
@@ -250,7 +246,6 @@ class Ranker:
 
     def cardToValue(self, card):
         values = {'2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13, 'A':14}
-        # print(card)
         return values[card]
 
     def sortHand(self, hand):

@@ -2,7 +2,9 @@ from Deck import Deck
 from Player import Player
 from Ranker import Ranker
 from Helper import Helper
+import csv
 import random
+import os
 
 
 def getDealerHand():
@@ -27,7 +29,7 @@ def checkHands(dealerHand, playerHands):
 
     playerResults = []
     for player in allPlayers:
-        print(player.name, player.getHand(), ranker.checkCombo(player.hand))
+        # print(player.name, player.getHand(), ranker.checkCombo(player.hand))
         playerResults.append([player.name, player.getHand(), ranker.checkCombo(player.hand)])
 
     return playerResults
@@ -49,19 +51,18 @@ def getResults(dealerHand, playerHands):
         # print(player)
     return [resultHands[winner][0],resultHands[winner][1],resultHands[winner][2]]
 
+def cls():
+    os.system('cls' if os.name=='nt' else 'clear')
+
+def clearConsole():
+    command = 'clear'
+    if os.name in ('nt', 'dos'):  # If Machine is running on Windows, use cls
+        command = 'cls'
+    os.system(command)
 
 deck = Deck()
 ranker = Ranker()
 helper = Helper()
-
-# two = ['10H','10S','5C','5D','2H']
-# three = ['10H','10S','5C','10D','6H']
-# four = ['10H','10S','10C','10D','AH']
-# straight = ['AH','3S','4C','5D','2H']
-# hand = straight
-# random.shuffle(hand)
-# print(hand)
-# print(ranker.checkCombo(hand))
 
 dealer = getDealerHand()
 players = getPlayerHands()
@@ -71,22 +72,27 @@ loopCount = 0
 allRanks = []
 dealerRanks = []
 dealerWins = [0,0,0,0,0,0,0,0,0,0]
+rankWins = [0,0,0,0,0,0,0,0,0,0]
 
 allHands = []
 dealerData = []
-numLoops = 100
+numLoops = 1000
 for count in range(0,numLoops):
     deck.addCardsToDeck(dealer.hand)
     dealer = getDealerHand()
     wins = 0
     for count in range(0,numLoops):
         loopCount += 1
-        print('Loop count: ', loopCount,'\n')
+        if loopCount % 500 == 0:
+            clearConsole()
+            progress = round((loopCount/(numLoops * numLoops) * 100),3)
+            print('Progress: ', progress,'%\n')
 
         shufflePlayerHands()
         players = getPlayerHands()
         results = getResults(dealer, players)
 
+        rankWins[round(results[2][0])] += 1
         dealerRank = round(ranker.checkCombo(dealer.hand)[0])
         allRanks.append(dealerRank)
         dealerRanks.append(dealerRank)
@@ -97,48 +103,60 @@ for count in range(0,numLoops):
         if results[0] == 'Dealer':
             wins += 1
             dealerWins[dealerRank] += 1
-            # print(results, '\n')
 
     dealerHand = dealer.hand
     handWins = wins
     handData = ranker.checkCombo(dealerHand)
+    # print(handData)
     dealerData.append([dealerHand, handWins, handData[1], handData[2], handData[3], handData[0]])
 
 combos = {0:'no pair', 1:'one pair', 2:'two pair', 3:'three of a kind', 4:'straight',
           5:'flush', 6:'full house', 7:'four of a kind', 8:'straight flush', 9:'royal flush'}
 
-for num in range(0,0):
-    print('-----------------------------')
-    print(combos[num],': ', dealerRanks.count(num))
-    if dealerWins[num] > 0:
-        print('Wins: ', dealerWins[num])
-        winPercent = round((dealerWins[num] / (dealerRanks.count(num)*numLoops))*100,3)
-        comboChance = round((dealerRanks.count(num)/numLoops) * 100, 5)
-        print('Win Percentage: ', winPercent, '%')
-        print('Chance of hand: ', comboChance,'%')
+# for num in range(0,0):
+#     print('-----------------------------')
+#     print(combos[num],': ', dealerRanks.count(num))
+#     if dealerWins[num] > 0:
+#         print('Wins: ', dealerWins[num])
+#         winPercent = round((dealerWins[num] / (dealerRanks.count(num)*numLoops))*100,3)
+#         comboChance = round((dealerRanks.count(num)/numLoops) * 100, 5)
+#         print('Win Percentage: ', winPercent, '%')
+#         print('Chance of hand: ', comboChance,'%')
 
-# print(dealerRanks)
-# print(dealerWins)
-# print(results)
-
-# print('\n' + str(len(allRanks)))
+stringLines = []
 for num in range(10):
-    percent = round((allRanks.count(num)/((numLoops*numLoops)*6)*100),3)
-    print(combos[num], ': ', percent,'%')
+    chance = round((allRanks.count(num)/((numLoops*numLoops)*6)*100),3)
+    if allRanks.count(num) > 0:
+        winRate = round(((rankWins[num]/allRanks.count(num)) * 100),3)
+    else:
+        winRate = 0
 
-print('\n')
-for entry in dealerData:
-    hand = str(entry[0])
-    numWins = entry[1]
-    winRatio = numWins/numLoops
-    comboString = entry[2]
-    highCard = entry[3]
-    handScore = entry[4]
-    print(entry, 'Win Chance: ', winRatio*100, '%')
+    stringLines.append('\n----------------\n')
+    stringLines.append(combos[num])
+    stringLines.append('\n----------------\n')
+    stringLines.append('chance of hand: ' + str(chance) + '%\n')
+    stringLines.append('win chance: ' + str(winRate) + '%\n')
+    # print(combos[num], ': ', 'chance of hand: ', chance,'%', ' win chance: ', winRate, '%')
 
+with open('Rank Review.txt', 'w') as f:
+    f.writelines(stringLines)
 
-# test = ['JS', '8S', 'QS', '10S', '9S']
-# print(ranker.checkCombo(test))
+file = open('Poker Probability.csv', 'w', newline='')
+
+with file:
+    writer = csv.writer(file)
+    writer.writerow(['Hand', 'Combo', 'High Card', 'Combo Value', 'Hand Value', 'Win Percentage'])
+    for entry in dealerData:
+        hand = str(entry[0])
+        numWins = entry[1]
+        handWinPercent = (numWins/numLoops) * 100
+        comboString = entry[2]
+        highCard = str(entry[3])
+        comboValue = entry[4]
+        handRank = entry[5]
+
+        columnData = [hand, comboString, highCard, comboValue, handRank, handWinPercent]
+        writer.writerow(columnData)
 
 
 
